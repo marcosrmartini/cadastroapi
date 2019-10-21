@@ -10,9 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.mmartini</groupId>
-	<artifactId>cadastro</artifactId>
+	<artifactId>cadastroapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cadastro</name>
+
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

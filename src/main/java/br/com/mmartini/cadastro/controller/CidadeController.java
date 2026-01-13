@@ -1,13 +1,10 @@
 package br.com.mmartini.cadastro.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.mmartini.cadastro.model.Cidade;
 import br.com.mmartini.cadastro.service.CidadeService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/cidade")
 public class CidadeController {
 
-	private static final Logger log = Logger.getLogger(CidadeController.class);
+	//private static final Logger log = Logger.getLogger(CidadeController.class);
 
 	@Autowired
 	private CidadeService service;

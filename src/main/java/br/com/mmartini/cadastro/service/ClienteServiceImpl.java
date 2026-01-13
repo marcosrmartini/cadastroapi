@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.mmartini.cadastro.repository.ClienteRepository;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.mmartini.cadastro.model.Cliente;
 
+@Slf4j
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
@@ -43,6 +46,12 @@ public class ClienteServiceImpl implements ClienteService {
 			return c.get();
 		} else
 			return new Cliente();
+	}
+
+	@Override
+	public List<Cliente> findAll() {
+		log.info("ClienteService - FindAll clients");
+		return repository.findAll();
 	}
 
 }

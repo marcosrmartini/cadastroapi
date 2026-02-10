@@ -19,20 +19,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.mmartini.cadastro.model.Cliente;
 import br.com.mmartini.cadastro.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 @RequestMapping(value = "/cliente")
+@Tag(name = "Cliente", description = "Endpoints para gerenciamento de clientes")
 public class ClienteController {
-
-	//private static final Logger log = Logger.getLogger(ClienteController.class);
 
 	@Autowired
 	private ClienteService service;
 
 	@PostMapping
+	@Operation(summary = "Criar novo cliente", description = "Cria um novo cliente no sistema")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Cliente criado com sucesso"),
+		@ApiResponse(responseCode = "202", description = "Requisição aceita"),
+		@ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+		@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+	})
 	public ResponseEntity<Cliente> incluirCliente(@Valid @RequestBody Cliente cliente) {
 		Cliente response = new Cliente();
 		try {
@@ -50,6 +61,12 @@ public class ClienteController {
 	}
 
 	@PutMapping
+	@Operation(summary = "Atualizar cliente", description = "Atualiza um cliente existente no sistema")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "202", description = "Cliente atualizado com sucesso"),
+		@ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+		@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+	})
 	public ResponseEntity<Cliente> alterarCliente(@Valid @RequestBody Cliente cliente) {
 		Cliente response = new Cliente();
 		try {
@@ -62,15 +79,25 @@ public class ClienteController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	
 	@GetMapping
-	private List<Cliente> findAll(){
+	@Operation(summary = "Listar todos os clientes", description = "Retorna uma lista de todos os clientes cadastrados")
+	@ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso")
+	public List<Cliente> findAll(){
 		log.info("Iniciando busca total de registros");
 		return service.findAll();
 	}
 
 	@RequestMapping(value = "/porNome/{nome}", method = RequestMethod.GET)
-	public ResponseEntity<List<Cliente>> pesquisaPorNome(@PathVariable("nome") String nome) {
+	@Operation(summary = "Buscar clientes por nome", description = "Busca clientes que contenham o nome especificado")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Clientes encontrados"),
+		@ApiResponse(responseCode = "202", description = "Nenhum cliente encontrado"),
+		@ApiResponse(responseCode = "404", description = "Não encontrado"),
+		@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+	})
+	public ResponseEntity<List<Cliente>> pesquisaPorNome(
+			@Parameter(description = "Nome do cliente a ser pesquisado")
+			@PathVariable("nome") String nome) {
 		log.info("Iniciando pesquisa por nome");
 		List<Cliente> response = new ArrayList();
 		try {
@@ -88,7 +115,16 @@ public class ClienteController {
 	}
 
 	@GetMapping(value = "/porId/{id}")
-	public ResponseEntity<Cliente> pesquisaPorId(@PathVariable("id") Long id) {
+	@Operation(summary = "Buscar cliente por ID", description = "Retorna um cliente específico pelo seu ID")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+		@ApiResponse(responseCode = "204", description = "Cliente não encontrado"),
+		@ApiResponse(responseCode = "404", description = "Não encontrado"),
+		@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+	})
+	public ResponseEntity<Cliente> pesquisaPorId(
+			@Parameter(description = "ID do cliente a ser pesquisado")
+			@PathVariable("id") Long id) {
 		Optional<Cliente> response;
 		try {
 			response = service.pesquisaPorId(id);
@@ -105,7 +141,15 @@ public class ClienteController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Cliente> removerCliente(@PathVariable("id") Long id) {
+	@Operation(summary = "Deletar cliente", description = "Remove um cliente do sistema")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204", description = "Cliente deletado com sucesso"),
+		@ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+		@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+	})
+	public ResponseEntity<Cliente> removerCliente(
+			@Parameter(description = "ID do cliente a ser removido")
+			@PathVariable("id") Long id) {
 		Cliente response = new Cliente();
 		try {
 			response = service.removerCliente(id);
